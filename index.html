@@ -3,53 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Management System</title>
+    <title>Login - Order Management</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Order Management System</h1>
-        </header>
-        <main>
-            <form id="order-form">
-                <input type="date" id="date" placeholder="Date" required>
-                <input type="text" id="content" placeholder="Content" required>
-                <input type="text" id="order-number" placeholder="Order Number" required>
-                <input type="number" id="quantity" placeholder="Quantity (kg)" step="0.01" required>
-                <input type="number" id="price" placeholder="Price (RM)" step="0.01" required>
-                <button type="button" id="add-row">Add Row</button>
-            </form>
-            <div id="capture-area">
-                <table id="order-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Content</th>
-                            <th>Order Number</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Total (RM)</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="5">Grand Total (RM)</td>
-                            <td id="grand-total">0.00</td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </main>
-        <footer>
-            <button id="capture-pdf">Generate PDF</button>
-        </footer>
+<body class="login-body">
+    <div class="login-container">
+        <h2>Welcome to Order Management</h2>
+        <p>Please enter your credentials to continue</p>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="error-message" class="error"></p>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (username === "admin" && password === "123456") {
+                localStorage.setItem("loggedIn", "true");
+                window.location.href = "order.html";
+            } else {
+                document.getElementById("error-message").textContent = "❌Invalid username or password!";
+            }
+        }
+    </script>
 </body>
 </html>

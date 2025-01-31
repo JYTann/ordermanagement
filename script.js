@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    loadRecords(); // Load records on page load
+    loadRecords();
 
     document.getElementById('add-row').addEventListener('click', function () {
         addRow();
@@ -21,10 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         html2canvas(captureArea).then(canvas => {
             const imgData = canvas.toDataURL('image/png');
             const pdf = new jspdf.jsPDF();
-            const imgWidth = 190; // Width of the PDF page in mm
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+            pdf.addImage(imgData, 'PNG', 10, 10, 190, (canvas.height * 190) / canvas.width);
             pdf.save('order-summary.pdf');
         }).catch(error => {
             console.error('Error generating PDF:', error);
@@ -66,30 +63,19 @@ function addRow() {
 }
 
 function updateGrandTotal() {
-    const rows = document.querySelectorAll('#order-table tbody tr');
     let grandTotal = 0;
-    rows.forEach(row => {
-        const total = parseFloat(row.cells[5].innerText);
-        grandTotal += total;
+    document.querySelectorAll('#order-table tbody tr').forEach(row => {
+        grandTotal += parseFloat(row.cells[5].innerText);
     });
     document.getElementById('grand-total').innerText = grandTotal.toFixed(2);
 }
 
-function clearForm() {
-    document.getElementById('date').value = '';
-    document.getElementById('content').value = '';
-    document.getElementById('order-number').value = '';
-    document.getElementById('quantity').value = '';
-    document.getElementById('price').value = '';
-}
-
 function editRow(row) {
-    const cells = row.cells;
-    document.getElementById('date').value = cells[0].innerText;
-    document.getElementById('content').value = cells[1].innerText;
-    document.getElementById('order-number').value = cells[2].innerText;
-    document.getElementById('quantity').value = parseFloat(cells[3].innerText);
-    document.getElementById('price').value = parseFloat(cells[4].innerText);
+    document.getElementById('date').value = row.cells[0].innerText;
+    document.getElementById('content').value = row.cells[1].innerText;
+    document.getElementById('order-number').value = row.cells[2].innerText;
+    document.getElementById('quantity').value = parseFloat(row.cells[3].innerText);
+    document.getElementById('price').value = parseFloat(row.cells[4].innerText);
 
     row.remove();
     updateGrandTotal();
@@ -133,4 +119,27 @@ function loadRecords() {
         `;
     });
     updateGrandTotal();
+}
+
+function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "index.html";
+}
+
+function checkLogin() {
+    if (localStorage.getItem("loggedIn") !== "true") {
+        window.location.href = "index.html";
+    }
+}
+
+function toggleTheme() {
+    document.body.classList.toggle("dark-theme");
+}
+
+function clearForm() {
+    document.getElementById('date').value = '';
+    document.getElementById('content').value = '';
+    document.getElementById('order-number').value = '';
+    document.getElementById('quantity').value = '';
+    document.getElementById('price').value = '';
 }
