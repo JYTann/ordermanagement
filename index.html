@@ -13,7 +13,9 @@
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
         <button onclick="login()">Login</button>
+        <button onclick="register()">Register</button>
         <p id="error-message" class="error"></p>
+        <p id="current-time"></p>
     </div>
 
     <script>
@@ -28,6 +30,26 @@
                 document.getElementById("error-message").textContent = "❌Invalid username or password!";
             }
         }
+
+        function register() {
+            const username = prompt("Enter a new username:");
+            const password = prompt("Enter a new password:");
+            if (username && password) {
+                // Save the new user in localStorage
+                localStorage.setItem(username, password);
+                alert("Registration successful! You can now log in with your credentials.");
+            } else {
+                alert("Username and password cannot be empty.");
+            }
+        }
+
+        // Display current time
+        function updateTime() {
+            const time = new Date().toLocaleTimeString();
+            document.getElementById("current-time").textContent = "Current time: " + time;
+        }
+
+        setInterval(updateTime, 1000); // Update the time every second
     </script>
 </body>
 </html>

@@ -55,9 +55,19 @@
 
         <footer>
             <button id="capture-pdf">📄 Generate PDF</button>
+            <p id="current-time"></p>
         </footer>
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // Display current time
+        function updateTime() {
+            const time = new Date().toLocaleTimeString();
+            document.getElementById("current-time").textContent = "Current time: " + time;
+        }
+
+        setInterval(updateTime, 1000); // Update the time every second
+    </script>
 </body>
 </html>

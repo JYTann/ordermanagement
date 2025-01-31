@@ -3,7 +3,15 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background: #f4f7fa;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* 🏠 登录页面背景 */
@@ -18,50 +26,80 @@
 /* 🎯 登录表单 */
 .login-container {
     width: 350px;
-    padding: 20px;
+    padding: 30px;
     background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
     text-align: center;
-    border-radius: 10px;
     animation: fadeIn 1s ease-in-out;
+    border: 2px solid #ddd;
 }
 
 .login-container h2 {
-    margin-bottom: 10px;
-    font-size: 24px;
+    margin-bottom: 20px;
+    font-size: 26px;
+    color: #35424a;
+    font-weight: 600;
 }
 
 .login-container p {
     font-size: 14px;
     color: #666;
+    margin-bottom: 20px;
 }
 
 /* 🔑 输入框 */
 input {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
+    padding: 12px;
+    margin: 15px 0;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+input:focus {
+    border-color: #35424a;
+    outline: none;
 }
 
 /* 🔘 登录按钮 */
 button {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background: #35424a;
     color: white;
     border: none;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 16px;
     transition: all 0.3s ease;
+    margin-bottom: 15px;
 }
 
 button:hover {
     background: #1f2a30;
     transform: scale(1.05);
+}
+
+/* 🔗 注册按钮 */
+#register-btn {
+    margin-top: 15px;
+    background: #5bc0de;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    transition: background 0.3s ease;
+}
+
+#register-btn:hover {
+    background: #31b0d5;
 }
 
 /* 🚨 错误消息 */
@@ -83,9 +121,10 @@ button:hover {
     max-width: 1100px;
     margin: auto;
     background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
 }
 
 /* 📌 顶部导航 */
@@ -95,18 +134,24 @@ header {
     align-items: center;
     background: #35424a;
     color: white;
-    padding: 15px 20px;
-    border-radius: 8px 8px 0 0;
+    padding: 20px 30px;
+    border-radius: 12px 12px 0 0;
 }
 
 header h1 {
     margin: 0;
-    font-size: 22px;
+    font-size: 26px;
 }
 
 /* 🚪 退出 & 主题切换按钮 */
 #logout {
     background: #d9534f;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    border: none;
 }
 
 #logout:hover {
@@ -115,6 +160,12 @@ header h1 {
 
 #toggle-theme {
     background: #5bc0de;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    border: none;
 }
 
 #toggle-theme:hover {
@@ -125,15 +176,15 @@ header h1 {
 form {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 15px;
     margin: 20px 0;
 }
 
 form input {
     flex: 1;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 8px;
 }
 
 form button {
@@ -148,12 +199,14 @@ form button:hover {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
+    margin: 30px 0;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 th, td {
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 12px;
     text-align: center;
 }
 
@@ -173,10 +226,11 @@ tr:hover {
 
 /* ✏️ 操作按钮 */
 .edit-row, .delete-row {
-    padding: 5px 10px;
+    padding: 8px 15px;
     border: none;
     cursor: pointer;
-    border-radius: 3px;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
 .edit-row {
@@ -200,11 +254,17 @@ tr:hover {
 /* 📌 页脚样式 */
 footer {
     text-align: center;
-    margin: 20px 0;
+    margin: 30px 0;
 }
 
 #capture-pdf {
     background: #0275d8;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    border: none;
 }
 
 #capture-pdf:hover {
