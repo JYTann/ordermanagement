@@ -29,6 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+function onSignIn(googleUser) {
+    // Get the Google user data
+    var profile = googleUser.getBasicProfile();
+    console.log("Signed in as: " + profile.getName());
+
+    // Perform the redirect
+    window.location.href = "https://jytann.github.io/ordermanagement/order.html"; 
+}
+
 function addRow() {
     const date = document.getElementById('date').value;
     const content = document.getElementById('content').value;
