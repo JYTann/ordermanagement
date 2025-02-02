@@ -29,14 +29,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function onSignIn(googleUser) {
-    // Get the Google user data
-    var profile = googleUser.getBasicProfile();
-    console.log("Signed in as: " + profile.getName());
+// Initialize Google Sign-In
+function handleCredentialResponse(response) {
+    // Handle successful login
+    const userObject = jwt_decode(response.credential); // Decode the JWT
+    console.log(userObject); // You can get user information here
 
-    // Perform the redirect
-    window.location.href = "https://jytann.github.io/ordermanagement/order.html"; 
+    // Store user data in localStorage
+    localStorage.setItem("loggedIn", "true");
+    localStorage.setItem("user", JSON.stringify(userObject));
+
+    // Redirect to the order page after login
+    window.location.href = "order.html";
 }
+
+window.onload = function () {
+    google.accounts.id.initialize({
+        client_id: "63785082304-dtla7pqikjs4cgmm857mi14f5ug7gqji.apps.googleusercontent.com",  // Replace with your client ID
+        callback: handleCredentialResponse
+    });
+    google.accounts.id.renderButton(
+        document.getElementById("google-signin-button"),
+        { theme: "outline", size: "large" }  // Customize button style
+    );
+};
+
 
 function addRow() {
     const date = document.getElementById('date').value;
