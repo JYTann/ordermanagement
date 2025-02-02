@@ -5,37 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Order Management</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Google Sign-In Script -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="login-body">
     <div class="login-container">
         <h2>Welcome to Order Management</h2>
         <p>Please enter your credentials to continue</p>
+
+        <!-- Username and Password Login -->
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
         <button onclick="login()">Login</button>
         <button onclick="register()">Register</button>
         <p id="error-message" class="error"></p>
+
+        <!-- Google Sign-In Button -->
+        <div id="google-signin-button"></div>
+
         <p id="current-time"></p>
     </div>
 
     <script>
+        // Initialize Google Sign-In
+        function handleCredentialResponse(response) {
+            // Handle successful login
+            const userObject = jwt_decode(response.credential); // Decode the JWT
+            console.log(userObject); // You can get user information here
+
+            // Store user data in localStorage
+            localStorage.setItem("loggedIn", "true");
+            localStorage.setItem("user", JSON.stringify(userObject));
+
+            // Redirect to order page after login
+            window.location.href = "order.html";
+        }
+
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: "63785082304-dtla7pqikjs4cgmm857mi14f5ug7gqji.apps.googleusercontent.com",  // Replace with your client ID from Google Developer Console
+                callback: handleCredentialResponse
+            });
+            google.accounts.id.renderButton(
+                document.getElementById("google-signin-button"), 
+                { theme: "outline", size: "large" }  // Customize button style
+            );
+        };
+
+        // Username/Password Login
         function login() {
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
+            // Check username and password (simplified for demo)
             if (username === "admin" && password === "123456") {
                 localStorage.setItem("loggedIn", "true");
                 window.location.href = "order.html";
             } else {
-                document.getElementById("error-message").textContent = "❌Invalid username or password!";
+                document.getElementById("error-message").textContent = "❌ Invalid username or password!";
             }
         }
 
+        // Register function (simplified for demo)
         function register() {
             const username = prompt("Enter a new username:");
             const password = prompt("Enter a new password:");
             if (username && password) {
-                // Save the new user in localStorage
+                // Save new user in localStorage
                 localStorage.setItem(username, password);
                 alert("Registration successful! You can now log in with your credentials.");
             } else {
