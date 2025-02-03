@@ -31,17 +31,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Initialize Google Sign-In
 function handleCredentialResponse(response) {
-    // Handle successful login
-    const userObject = jwt_decode(response.credential); // Decode the JWT
-    console.log(userObject); // You can get user information here
+    console.log("Google Login Response:", response);
+    const userObject = jwt_decode(response.credential); 
+
+    console.log("Decoded User:", userObject);
 
     // Store user data in localStorage
     localStorage.setItem("loggedIn", "true");
     localStorage.setItem("user", JSON.stringify(userObject));
 
-    // Redirect to the order page after login
+    console.log("Redirecting to order.html...");
     window.location.href = "order.html";
 }
+
 
 window.onload = function () {
     google.accounts.id.initialize({

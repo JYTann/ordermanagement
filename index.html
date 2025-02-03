@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <!-- Google Sign-In Script -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
 </head>
 <body class="login-body">
     <div class="login-container">
@@ -56,28 +57,36 @@
         function login() {
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
-
-            // Check username and password (simplified for demo)
-            if (username === "admin" && password === "123456") {
+            let users = JSON.parse(localStorage.getItem("users")) || {}; // 读取用户列表
+            if (users[username] === password) {
                 localStorage.setItem("loggedIn", "true");
+                localStorage.setItem("user", username); // 记录当前登录用户
                 window.location.href = "order.html";
             } else {
                 document.getElementById("error-message").textContent = "❌ Invalid username or password!";
             }
         }
 
+
         // Register function (simplified for demo)
         function register() {
             const username = prompt("Enter a new username:");
             const password = prompt("Enter a new password:");
+            
             if (username && password) {
-                // Save new user in localStorage
-                localStorage.setItem(username, password);
-                alert("Registration successful! You can now log in with your credentials.");
+                let users = JSON.parse(localStorage.getItem("users")) || {}; // 取出已有用户列表
+                if (users[username]) {
+                    alert("Username already exists!"); // 防止重复注册
+                    return;
+                }
+                users[username] = password; // 添加新用户
+                localStorage.setItem("users", JSON.stringify(users)); // 存入 localStorage
+                alert("Registration successful! You can now log in.");
             } else {
                 alert("Username and password cannot be empty.");
             }
         }
+
 
         // Display current time
         function updateTime() {
