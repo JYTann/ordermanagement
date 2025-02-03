@@ -44,6 +44,23 @@ function handleCredentialResponse(response) {
     window.location.href = "order.html";
 }
 
+function showSuccessPopup() {
+    let popup = document.getElementById("success-popup");
+    popup.style.display = "block";
+
+    setTimeout(() => {
+        popup.style.display = "none";
+    }, 2000); // 2秒后消失
+}
+
+// 假设这是登录成功的事件
+document.getElementById("login-btn").addEventListener("click", function(event) {
+    event.preventDefault(); // 阻止表单提交（仅用于测试）
+    
+    // 这里你可以添加实际的验证逻辑，成功后执行：
+    showSuccessPopup();
+});
+
 
 window.onload = function () {
     google.accounts.id.initialize({

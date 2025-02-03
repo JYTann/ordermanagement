@@ -5,96 +5,196 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Order Management</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Google Sign-In Script -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <style>
+        /* 🎡 跑马灯样式 */
+        .marquee-container {
+            width: 100%;
+            background: #ff4444;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            display: none; /* 默认隐藏 */
+        }
+
+        /* 让文字循环滚动 */
+        .marquee-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 10s linear infinite;
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+    </style>
 </head>
 <body class="login-body">
+    <!-- 🔴 跑马灯通知 -->
+    <div class="marquee-container" id="marquee-container">
+        <span class="marquee-text">🚫 Login is not available from 12:00 p.m. to 01:00 p.m. daily. Kindly avoid logging in during this time period.🚫</span>
+    </div>
+
     <div class="login-container">
         <h2>Welcome to Order Management</h2>
         <p>Please enter your credentials to continue</p>
 
-        <!-- Username and Password Login -->
+        <!-- 🔑 用户名和密码登录 -->
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
         <button onclick="login()">Login</button>
         <button onclick="register()">Register</button>
         <p id="error-message" class="error"></p>
 
-        <!-- Google Sign-In Button -->
+        <!-- 🔵 忘记密码按钮 -->
+        <p><a href="#" id="forgot-password">Forgot Password?</a></p>
+
+        <!-- 🟢 Google 登录按钮 -->
         <div id="google-signin-button"></div>
 
         <p id="current-time"></p>
     </div>
 
+    <!-- ✅ 登录成功弹窗 -->
+    <div id="success-popup">
+        <div class="checkmark-circle">
+            <div class="background"></div>
+            <div class="checkmark draw"></div>
+        </div>
+        <p>Login successful!</p>
+    </div>
+
     <script>
-        // Initialize Google Sign-In
-        function handleCredentialResponse(response) {
-            // Handle successful login
-            const userObject = jwt_decode(response.credential); // Decode the JWT
-            console.log(userObject); // You can get user information here
+        // ✅ 检查当前时间是否允许登录
+        function isLoginAllowed() {
+            const now = new Date();
+            const hours = now.getHours();
+            return !(hours >= 12 && hours < 13); // 12:00 - 13:00 禁止登录
+        }
 
-            // Store user data in localStorage
-            localStorage.setItem("loggedIn", "true");
-            localStorage.setItem("user", JSON.stringify(userObject));
+        // ✅ 显示登录成功弹窗
+        function showSuccessPopup() {
+            let popup = document.getElementById("success-popup");
+            popup.style.display = "block";
 
-            // Redirect to order page after login
-            window.location.href = "order.html";
+            setTimeout(() => {
+                popup.style.display = "none";
+                window.location.href = "order.html"; // 🎯 2秒后跳转
+            }, 2000);
+        }
+
+        // ✅ 显示跑马灯（仅在11点到13点之间）
+        function showMarqueeIfTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            if (hours >= 10 && hours < 13) {
+                document.getElementById("marquee-container").style.display = "block";
+            } else {
+                document.getElementById("marquee-container").style.display = "none";
+            }
         }
 
         window.onload = function () {
+            // 在页面加载时显示跑马灯
+            showMarqueeIfTime();
+
             google.accounts.id.initialize({
-                client_id: "63785082304-dtla7pqikjs4cgmm857mi14f5ug7gqji.apps.googleusercontent.com",  // Replace with your client ID from Google Developer Console
+                client_id: "63785082304-dtla7pqikjs4cgmm857mi14f5ug7gqji.apps.googleusercontent.com",
                 callback: handleCredentialResponse
             });
             google.accounts.id.renderButton(
                 document.getElementById("google-signin-button"), 
-                { theme: "outline", size: "large" }  // Customize button style
+                { theme: "outline", size: "large" }
             );
         };
 
-        // Username/Password Login
+        // ✅ Google 登录
+        function handleCredentialResponse(response) {
+            if (!isLoginAllowed()) {
+                document.getElementById("error-message").textContent = "⏰ Login is restricted at this time. Please try again later.";
+                return;
+            }
+
+            const userObject = jwt_decode(response.credential);
+            console.log(userObject);
+
+            localStorage.setItem("loggedIn", "true");
+            localStorage.setItem("user", JSON.stringify(userObject));
+
+            showSuccessPopup();
+        }
+
+        // ✅ 用户名/密码登录
         function login() {
+            if (!isLoginAllowed()) {
+                document.getElementById("error-message").textContent = "⏰ 登录时间受限，请稍后再试！";
+                return;
+            }
+
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
-            let users = JSON.parse(localStorage.getItem("users")) || {}; // 读取用户列表
+            let users = JSON.parse(localStorage.getItem("users")) || {};
+
             if (users[username] === password) {
                 localStorage.setItem("loggedIn", "true");
-                localStorage.setItem("user", username); // 记录当前登录用户
-                window.location.href = "order.html";
+                localStorage.setItem("user", username);
+                showSuccessPopup();
             } else {
                 document.getElementById("error-message").textContent = "❌ Invalid username or password!";
             }
         }
 
-
-        // Register function (simplified for demo)
+        // ✅ 用户注册
         function register() {
             const username = prompt("Enter a new username:");
             const password = prompt("Enter a new password:");
-            
+
             if (username && password) {
-                let users = JSON.parse(localStorage.getItem("users")) || {}; // 取出已有用户列表
+                let users = JSON.parse(localStorage.getItem("users")) || {};
                 if (users[username]) {
-                    alert("Username already exists!"); // 防止重复注册
+                    alert("Username already exists!");
                     return;
                 }
-                users[username] = password; // 添加新用户
-                localStorage.setItem("users", JSON.stringify(users)); // 存入 localStorage
+                users[username] = password;
+                localStorage.setItem("users", JSON.stringify(users));
                 alert("Registration successful! You can now log in.");
             } else {
                 alert("Username and password cannot be empty.");
             }
         }
 
+        // ✅ 忘记密码
+        document.getElementById("forgot-password").addEventListener("click", function () {
+            const username = prompt("Enter your username:");
+            let users = JSON.parse(localStorage.getItem("users")) || {};
 
-        // Display current time
+            if (users[username]) {
+                const newPassword = prompt("Enter your new password:");
+                if (newPassword) {
+                    users[username] = newPassword;
+                    localStorage.setItem("users", JSON.stringify(users));
+                    alert("Password reset successful! You can now log in.");
+                }
+            } else {
+                alert("Username not found!");
+            }
+        });
+
+        // ✅ 显示当前时间
         function updateTime() {
             const time = new Date().toLocaleTimeString();
             document.getElementById("current-time").textContent = "Current time: " + time;
         }
 
-        setInterval(updateTime, 1000); // Update the time every second
+        setInterval(updateTime, 1000);
     </script>
 </body>
 </html>

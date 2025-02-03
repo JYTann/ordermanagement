@@ -102,6 +102,90 @@ button:hover {
     background: #31b0d5;
 }
 
+/* 🔵 忘记密码按钮 */
+#forgot-password {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+#forgot-password:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+
+/* ✅ 登录成功弹窗 */
+#success-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    z-index: 1000;
+}
+
+#success-popup p {
+    font-size: 20px;
+    color: #35424a;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* ✅ 绿色打勾动画 */
+.checkmark-circle {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    margin: auto;
+}
+
+.checkmark-circle .background {
+    width: 100%;
+    height: 100%;
+    background: #28a745;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.checkmark {
+    width: 40px;
+    height: 20px;
+    border: 5px solid white;
+    border-width: 0 0 5px 5px;
+    transform: rotate(-45deg);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+    margin: -10px 0 0 -20px;
+    animation: checkmark 0.5s ease-in-out;
+}
+
+@keyframes checkmark {
+    0% {
+        width: 0;
+        height: 0;
+    }
+    50% {
+        width: 40px;
+        height: 0;
+    }
+    100% {
+        width: 40px;
+        height: 20px;
+    }
+}
+
+
 /* 🚨 错误消息 */
 .error {
     color: red;
